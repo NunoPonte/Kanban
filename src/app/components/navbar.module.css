@@ -1,0 +1,15 @@
+.switchDiv {
+  display: flex;
+}
+.logo {
+  position: absolute;
+  transition: opacity 1s ease, transform 1s ease;
+}
+.themeSwitch {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  margin: auto;
+  transition: opacity 1s ease, transform 1s ease;
+}

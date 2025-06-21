@@ -1,0 +1,326 @@
+.pageContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding: 2rem;
+}
+
+.inputFieldsWrapper {
+  margin-top: auto;
+  width: 100%;
+}
+
+.statusHeader {
+  background-color: #2e86c1;
+  color: white;
+  padding: 0.75rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.problemDetails {
+  margin-top: 0.5rem;
+  background-color: inherit;
+  color: white;
+  border-radius: 8px;
+  padding: 0.5rem;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+  position: relative;
+}
+
+.problemDetails summary {
+  cursor: pointer;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.problemDetails summary::-webkit-details-marker {
+  display: none;
+}
+
+.problemDetails:not([open]) .problemDescription {
+  max-height: 4.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  white-space: normal;
+}
+
+details[open] .problemDescription {
+  max-height: 1000px;
+  opacity: 1;
+  display: block;
+}
+
+.problemDetails[open] {
+  max-height: 100%;
+}
+
+.problemDetails[open] .problemDescription {
+  display: block;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  color: white;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #f5f5f5;
+  padding-bottom: 6px;
+}
+
+.dateTime {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.icon {
+  width: 12px;
+  height: 12px;
+}
+
+.cardHeader > .dateTime + .dateTime {
+  margin-left: 16px;
+}
+
+.problem {
+  margin-top: 0rem;
+  color: white;
+}
+
+.problem > strong {
+  margin: 0;
+  display: block;
+  font-size: 0.9rem;
+}
+
+.problemText {
+  font-size: 0.9rem;
+  color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  white-space: normal;
+}
+
+.problemDescription {
+  font-size: 0.9rem;
+  color: white;
+  word-wrap: break-word;
+  margin-top: 0.5rem;
+  display: none;
+}
+
+.previewText {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+  margin-right: 1rem;
+}
+
+.problemSummary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  color: white;
+  font-size: 0.8rem;
+  margin-left: -5px;
+  margin-top: -10px;
+  background: none;
+  border: none;
+  width: 100%;
+  position: relative;
+}
+
+.problemSummary .expandIcon {
+  margin-left: auto;
+  transition: transform 0.3s ease, margin-left 0.3s ease;
+}
+
+details[open] .problemSummary {
+  justify-content: flex-start;
+  bottom: 0;
+  right: 0;
+}
+
+details[open] .expandIcon {
+  position: absolute; 
+  top: auto;
+  bottom: 0; 
+  left: auto;
+  right: 0;
+  transition: transform 0.3s ease; 
+}
+
+.expandIconOpen {
+  transform: rotate(180deg); 
+}
+
+.expandIcon {
+  width: 40px;
+  height: 28px;
+  border: 2px solid white;
+  border-radius: 43%;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 9999;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.truncatedText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  line-clamp: 3;
+  white-space: normal;
+  max-width: 80%;
+  flex: 1;
+  color: white;
+  margin-right: 5%;
+}
+
+.tecnico {
+  display: flex;
+  justify-content: space-between;
+  align-items: left;
+  gap: 10px;
+  margin-top: 0.5rem;
+  position: relative;
+  flex-direction: column; 
+}
+
+.tecnico .expandIcon {
+  margin-left: auto;
+  transition: transform 0.3s ease;
+}
+
+
+.expandIcon::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -50%) rotate(45deg);
+  display: block;
+}
+
+details[open] .expandIcon::before {
+  transform: translate(-50%, -50%) rotate(-135deg);
+}
+
+.columnsContainer {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  align-items: flex-start;
+}
+
+.cardsContainer {
+  overflow-y: auto;
+  max-height: calc(75vh - 50px);
+  padding-top: 1rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.cardsContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.columnTitle {
+  font-size: 1.3rem;
+  position: sticky;
+}
+
+.filter {
+  margin-top: 5%;
+  font-size: 0.9rem;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  cursor: pointer;
+  color: white;
+}
+
+.dropdownIcon {
+  font-size: 0.7rem;
+}
+
+.problemFullText {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.4s ease;
+  font-size: 0.9rem;
+  color: white;
+  margin-top: 0.5rem;
+}
+
+details[open] .problemFullText {
+  max-height: 500px;
+  opacity: 1;
+}
+
+.cliente,
+.pat,
+.urgencia {
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.cliente strong,
+.pat strong,
+.urgencia strong {
+  font-size: 0.7rem;
+  margin-bottom: 0.3rem;
+}
+
+.cliente span,
+.pat span,
+.urgencia span {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+details[open] .truncatedText {
+  display: none;
+}
