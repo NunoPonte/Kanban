@@ -241,6 +241,7 @@ details[open] .expandIcon::before {
   gap: 1rem;
   padding: 1rem;
   align-items: flex-start;
+  height: 79vh;
 }
 
 .cardsContainer {

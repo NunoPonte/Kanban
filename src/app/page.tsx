@@ -9,7 +9,6 @@ import {
 } from "@hello-pangea/dnd";
 import { useState, useEffect } from "react";
 import styles from "./page.module.css";
-import SWR from "swr";
 import Navbar from "./components/navbar";
 import InputFields from "./components/inputFields";
 
@@ -24,6 +23,142 @@ interface Problema {
   Data: string;
   posicao: number;
 }
+
+// DADOS FIXOS PARA OS CARDS
+const staticProblemas: Problema[] = [
+  {
+    id: "1",
+    NºPat: 123,
+    NCont: 1,
+    Nome: "José da Silva",
+    ProblemaDescricao: "Problema no sistema de login.",
+    Status: "Backlog",
+    Tecnico: "João",
+    Data: "2025-06-23T09:00:00",
+    posicao: 0,
+  },
+  {
+    id: "2",
+    NºPat: 456,
+    NCont: 2,
+    Nome: "Joana Souza",
+    ProblemaDescricao: "Erro ao imprimir relatório.",
+    Status: "Análise",
+    Tecnico: "Maria",
+    Data: "2025-06-22T10:30:00",
+    posicao: 0,
+  },
+  {
+    id: "3",
+    NºPat: 789,
+    NCont: 3,
+    Nome: "Tiago Oliveira",
+    ProblemaDescricao: "Sistema lento ao abrir tela.",
+    Status: "Em Tratamento",
+    Tecnico: "Carlos",
+    Data: "2025-06-21T14:15:00",
+    posicao: 0,
+  },
+  {
+    id: "4",
+    NºPat: 101,
+    NCont: 4,
+    Nome: "Pedro Santos",
+    ProblemaDescricao: "Dúvida sobre funcionalidade X.",
+    Status: "Aguarda Cliente",
+    Tecnico: "Ana",
+    Data: "2025-06-20T16:45:00",
+    posicao: 0,
+  },
+  {
+    id: "5",
+    NºPat: 202,
+    NCont: 5,
+    Nome: "Gonçalo Lima",
+    ProblemaDescricao: "Solicitação de proposta.",
+    Status: "Aguarda Proposta",
+    Tecnico: "Pedro",
+    Data: "2025-06-19T11:20:00",
+    posicao: 0,
+  },
+  {
+    id: "6",
+    NºPat: 303,
+    NCont: 6,
+    Nome: "Diana Costa",
+    ProblemaDescricao: "Problema resolvido.",
+    Status: "Fechado",
+    Tecnico: "Lucas",
+    Data: "2025-06-18T08:10:00",
+    posicao: 0,
+  },
+   {
+    id: "7",
+    NºPat: 404,
+    NCont: 7,
+    Nome: "Rita Martins",
+    ProblemaDescricao: "Falha ao exportar para Excel.",
+    Status: "Backlog",
+    Tecnico: "João",
+    Data: "2025-06-23T11:00:00",
+    posicao: 0,
+  },
+  {
+    id: "8",
+    NºPat: 505,
+    NCont: 8,
+    Nome: "Miguel Alves",
+    ProblemaDescricao: "Impressora não responde.",
+    Status: "Análise",
+    Tecnico: "Maria",
+    Data: "2025-06-22T15:45:00",
+    posicao: 0,
+  },
+  {
+    id: "9",
+    NºPat: 606,
+    NCont: 9,
+    Nome: "Carla Ferreira",
+    ProblemaDescricao: "Erro de autenticação no email.",
+    Status: "Em Tratamento",
+    Tecnico: "Carlos",
+    Data: "2025-06-21T17:30:00",
+    posicao: 0,
+  },
+  {
+    id: "10",
+    NºPat: 707,
+    NCont: 10,
+    Nome: "Bruno Lopes",
+    ProblemaDescricao: "Solicitação de alteração de senha.",
+    Status: "Aguarda Cliente",
+    Tecnico: "Ana",
+    Data: "2025-06-20T18:00:00",
+    posicao: 0,
+  },
+  {
+    id: "11",
+    NºPat: 808,
+    NCont: 11,
+    Nome: "Sofia Pinto",
+    ProblemaDescricao: "Dúvida sobre relatório financeiro.",
+    Status: "Aguarda Proposta",
+    Tecnico: "Pedro",
+    Data: "2025-06-19T13:10:00",
+    posicao: 0,
+  },
+  {
+    id: "12",
+    NºPat: 909,
+    NCont: 12,
+    Nome: "André Sousa",
+    ProblemaDescricao: "Backup realizado com sucesso.",
+    Status: "Fechado",
+    Tecnico: "Lucas",
+    Data: "2025-06-18T09:30:00",
+    posicao: 0,
+  },
+];
 
 export default function Page() {
   const statusCategories = React.useMemo(
@@ -41,22 +176,11 @@ export default function Page() {
   const [searchCliente, setSearchCliente] = useState("");
   const [searchTecnico, setSearchTecnico] = useState("");
 
-  const fetcher = (url: string) =>
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_AUTH}`,
-        InWebPublicKey: process.env.NEXT_PUBLIC_API_IN_WEB_PUBLIC_KEY || "",
-      },
-    }).then((res) => res.json());
-
-  const { data: initialProblemas = [] } = SWR("/api/paERP", fetcher);
-
-  console.log("Initial Problemas:", initialProblemas); // Check the fetched data
+  // NÃO BUSCA MAIS DA API, USA OS DADOS FIXOS
+  const initialProblemas = staticProblemas;
 
   const [columns, setColumns] = useState<Record<string, Problema[]>>(() =>
-    Object.fromEntries(
-      statusCategories.map((status) => [status, []]) // Initialize with empty arrays
-    )
+    Object.fromEntries(statusCategories.map((status) => [status, []]))
   );
 
   const DraggableContainer = React.memo(
@@ -77,12 +201,11 @@ export default function Page() {
         <Draggable key={item.id} draggableId={item.id} index={index}>
           {(provided, snapshot) => (
             <div
-              ref={(node)=>{
+              ref={(node) => {
                 provided.innerRef(node);
                 cardRef.current = node as HTMLDivElement;
               }}
-              // ref={provided.innerRef}
-              {...provided.draggableProps}       
+              {...provided.draggableProps}
               style={{
                 ...getItemStyle(
                   snapshot.isDragging,
@@ -95,19 +218,21 @@ export default function Page() {
                 snapshot.isDragging ? "dragging previewDragging" : ""
               } draggable`}
             >
-              <div className={styles.expandIcon} onClick={(e) => {
-                const details = cardRef.current?.querySelector("details");
-                const button = e.currentTarget;
-                if (details) {
-                  console.log("Details element:", details.open);
-                  details.open = !details.open;
-                  if (details.open) {
-                    button.classList.add(styles.expandIconOpen);
-                  } else {
-                    button.classList.remove(styles.expandIconOpen);
+              <div
+                className={styles.expandIcon}
+                onClick={(e) => {
+                  const details = cardRef.current?.querySelector("details");
+                  const button = e.currentTarget;
+                  if (details) {
+                    details.open = !details.open;
+                    if (details.open) {
+                      button.classList.add(styles.expandIconOpen);
+                    } else {
+                      button.classList.remove(styles.expandIconOpen);
+                    }
                   }
-                }
-              }}></div>
+                }}
+              ></div>
               <div {...provided.dragHandleProps}>
                 <div className={styles.cardHeader}>
                   <div className={styles.dateTime}>
@@ -124,10 +249,12 @@ export default function Page() {
                       alt="Relógio"
                       className={styles.icon}
                     />
-                    <strong>{new Date(item.Data).toLocaleTimeString()}</strong>{" "}
+                    <strong>
+                      {new Date(item.Data).toLocaleTimeString()}
+                    </strong>{" "}
                   </div>
                 </div>
-                
+
                 <div className={styles.cliente}>
                   <strong>Cliente</strong>
                   <span>{item.Nome}</span>
@@ -136,7 +263,6 @@ export default function Page() {
                   <div className={styles.pat}>
                     <strong>Pat nº</strong>
                     <span>{item.NºPat}</span>
-                    {/* <span>{item.posicao}</span> */}
                   </div>
                   <div className={styles.urgencia}>
                     <strong>Urgência</strong>
@@ -174,27 +300,17 @@ export default function Page() {
   useEffect(() => {
     if (initialProblemas.length > 0) {
       const mappedProblemas: Problema[] = initialProblemas.map((item: any) => ({
-        id: String(item.id || item.nopat || ""), 
-        NºPat: item.nopat || 0,
-        NCont: item.ncont || 0,
-        Nome: item.nome || "",
-        ProblemaDescricao: item.problema || "",
-        Status: item.status || "",
-        Tecnico: item.tecnnm || "",
-        Data: item.sk_dateTimeCreation || "",
-        posicao: item.posicao || 0,
+        ...item,
       }));
 
       const sortedProblemas = mappedProblemas.sort(
         (a, b) => a.posicao - b.posicao
       );
 
-      console.log("Mapped Problemas:", sortedProblemas);
-
       const groupedColumns = Object.fromEntries(
         statusCategories.map((status) => [
           status,
-          mappedProblemas.filter((item) => item.Status === status),
+          sortedProblemas.filter((item) => item.Status === status),
         ])
       );
 
@@ -239,48 +355,8 @@ export default function Page() {
         newColumns[destination.droppableId] = destinationColumn;
       }
 
-      const changedItems = [
-        ...newColumns[source.droppableId],
-        ...newColumns[destination.droppableId],
-      ].filter((item, index) => item.posicao !== index);
-
-      changedItems.forEach((item) => {
-        updateStatus(item.id, item.Status, item.posicao);
-      });
-
       return newColumns;
     });
-  };
-
-  const updateStatus = async (
-    itemId: string,
-    newStatus: string,
-    newPosicao: number
-  ) => {
-    try {
-      console.log("Updating status for item:", itemId);
-      console.log(`(${itemId}) New status:`, newStatus);
-      console.log(`(${itemId}) New position:`, newPosicao);
-      const response = await fetch(`/api/paERP/update`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${process.env.NEXT_PUBLIC_API_AUTH}`,
-          InWebPublicKey: process.env.NEXT_PUBLIC_API_IN_WEB_PUBLIC_KEY || "",
-        },
-        body: JSON.stringify({
-          nopat: itemId,
-          status: newStatus,
-          posicao: newPosicao,
-        }),
-      });
-
-      if (!response.ok) {
-        console.error("Failed to update status", response.statusText);
-      }
-    } catch (error) {
-      console.error("Error updating status", error);
-    }
   };
 
   const getItemStyle = (
@@ -328,20 +404,6 @@ export default function Page() {
                 >
                   <div className={styles.columnHeader}>
                     <div className={styles.columnTitle}>{status}</div>
-                    {/* <div className={styles.filter}>
-                      <span>Últimos</span>
-                      <div className={styles.dropdownWrapper}>
-                        <select
-                          className={styles.dropdown}
-                          onChange={(e) => handleDaysFilterChange(status, e.target.value)}
-                        >
-                          <option value="5">5 dias</option>
-                          <option value="10">10 dias</option>
-                          <option value="30">30 dias</option>
-                          <option value="all">Todos</option>
-                        </select>
-                      </div>
-                    </div> */}
                   </div>
                   <div className={styles.cardsContainer}>
                     {columns[status]
